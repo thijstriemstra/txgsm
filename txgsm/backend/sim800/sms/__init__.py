@@ -164,18 +164,8 @@ class SMSManager(CommandLocator):
         return {}
 
 
-    def deleteMessage(self, index):
-        """
-        Delete SMS message.
-
-        :param index:
-        :type index: int
-        """
-        # XXX: txgsm.backends.sim800.sms.commands.SMSDeleteMessage
-        pass
-
-
-    def readMessage(self, index):
+    @commands.SMSReadMessageWrite.responder
+    def smsReadMessageWrite(self, index):
         """
         Read SMS message.
 
@@ -183,27 +173,39 @@ class SMSManager(CommandLocator):
           associated memory.
         :type index: int
         """
-        # XXX: txgsm.backends.sim800.sms.commands.SMSReadMessage
-        pass
+        atCommandName = 'AT+CMGR=<index>[,<mode>]'
+
+        # maxResponseTime = 5
+
+        # XXX: call AT command
+
+        return {}
 
 
-    def sendMessage(self):
+    @commands.SMSSendMessageWrite.responder
+    def smsSendMessageWrite(self, da, toda=None, length=0, message=''):
         """
-        Sends message to the network.
-        """
-        # XXX: txgsm.backends.sim800.sms.commands.SMSSendMessage
-        pass
+        Send SMS message.
 
-
-    def selectMessageFormat(self, mode):
+        :param da:
+        :type da: string
+        :param toda:
+        :type toda: int
+        :param length:
+        :type length: int
+        :param message:
+        :type message: string
         """
-        Select SMS message format.
+        atCommandName = '+CMGS=<da>[,<toda>] <CR>text is entered <ctrl-Z/ESC>'
 
-        :param mode: Denotes which input and output format of messages to use.
-        :type mode: int
-        """
-        # XXX: txgsm.backends.sim800.sms.commands.SMSSelectMessageFormat
-        pass
+        # maxResponseTime = 60
+
+        # XXX: call AT command
+
+        # XXX: parse AT command result
+        response = '+CMGS: <mr>'
+
+        return {}
 
 
     @commands.SMSServiceCenterAddressRead.responder
@@ -244,6 +246,95 @@ class SMSManager(CommandLocator):
         atCommandName = 'AT+CSCA=<sca>[,<tosca>]'
 
         # XXX: maxResponseTime = 5
+        # XXX: call AT command
+
+        return {}
+
+
+    @commands.SMSSelectMessageFormatTest.responder
+    def smsSelectMessageFormatTest(self):
+        """
+        Get list of supported SMS message format modes.
+        """
+        atCommandName = 'AT+CMGF=?'
+
+        # XXX: call AT command
+
+        # XXX: parse AT command result
+        response = '+CMGF: (list of supported <mode>s)'
+
+        # return AT command result
+        return {
+            'modes': [0, 1]
+        }
+
+
+    @commands.SMSSelectMessageFormatRead.responder
+    def smsSelectMessageFormatRead(self):
+        """
+        Get current SMS message format mode.
+        """
+        atCommandName = 'AT+CMGF?'
+
+        # XXX: call AT command
+
+        # XXX: parse AT command result
+        response = '+CMGF: <mode>'
+
+        # return AT command result
+        return {
+            'mode': 0
+        }
+
+
+    @commands.SMSSelectMessageFormatWrite.responder
+    def smsSelectMessageFormatWrite(self, mode):
+        """
+        Change current SMS message format mode.
+
+        :param mode: Denotes which input and output format of messages to use.
+        :type mode: int
+        """
+        atCommandName = 'AT+CMGF=[<mode>]'
+
+        # XXX: call AT command
+
+        return {}
+
+
+    @commands.SMSDeleteMessageTest.responder
+    def smsDeleteMessageTest(self):
+        """
+        Get supported ranges and parameters for deleting an SMS message.
+        """
+        atCommandName = 'AT+CMGD=?'
+
+        # XXX: call AT command
+
+        # XXX: parse AT command result
+        response = '+CMGD: (list of supported <index>s),(list of supported <delflag>s)'
+
+        # return AT command result
+        return {
+            'index': [0, 1],
+            'delflag': [0, 1, 2, 3, 4]
+        }
+
+
+    @commands.SMSDeleteMessageWrite.responder
+    def smsDeleteMessageWrite(self, index, delflag=None):
+        """
+        Delete SMS message.
+
+        :param index:
+        :type index: int
+        :param delflag:
+        :type delflag: int
+        """
+        atCommandName = 'AT+CMGD=<index>[,<delflag>]'
+
+        # maxResponseTime = 25
+
         # XXX: call AT command
 
         return {}

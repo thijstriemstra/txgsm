@@ -30,6 +30,18 @@ class SMSConstants(Values):
     ROUTE_SMSDELIVER_MT = ValueConstant(1)
     CLASS3_SMSDELIVER_MT = ValueConstant(2)
 
+    NORMAL_MODE = ValueConstant(0)
+    NO_CHANGE_MODE = ValueConstant(1)
+
+    PDU_MODE = ValueConstant(0)
+    TEXT_MODE = ValueConstant(1)
+
+    DELETE_AT_INDEX = ValueConstant(0)
+    DELETE_READ = ValueConstant(1)
+    DELETE_READ_SENT = ValueConstant(2)
+    DELETE_SENT_UNSENT = ValueConstant(3)
+    DELETE_ALL = ValueConstant(4)
+
 
 class SMSCodeModeTest(Command):
     """
@@ -143,91 +155,76 @@ class SMSServiceCenterAddressWrite(Command):
     requiresAnswer = False
 
 
-class SMSSendMessage(Command):
+class SMSSendMessageWrite(Command):
     """
     Send SMS message.
     """
-    maxResponseTime = 60
+    arguments = [
+        ('da', String()),
+        ('toda', Integer(optional=True)),
+        ('length', Integer()),
+        ('message', String())
+    ]
 
-    TEST_COMMAND = ValueConstant({
-        'command': 'AT+CMGS=?'
-    })
-    WRITE_COMMAND = ValueConstant({
-        'command': '+CMGS=<da>[,<toda>] <CR>text is entered <ctrl-Z/ESC>',
-        'response': '+CMGS: <mr>',
-        'params': {
-            'da': 0,
-            'toda': 0,
-            'length': 0
-        }
-    })
+    response = [
+        ('mr', String())
+    ]
 
 
-class SMSReadMessage(Command):
+class SMSReadMessageWrite(Command):
     """
-    Read SMS Message.
+    Read SMS message.
     """
-    maxResponseTime = 5
-
-    NORMAL_MODE = ValueConstant(0)
-    NO_CHANGE_MODE = ValueConstant(1)
-
-    TEST_COMMAND = ValueConstant({
-        'command': 'AT+CMGR=?'
-    })
-    WRITE_COMMAND = ValueConstant({
-        'command': 'AT+CMGR=<index>[,<mode>]',
-        'response': '+CMGS: <mr>',
-        'params': {
-            'index': 0,
-            'mode': 0
-        }
-    })
+    arguments = [
+        ('index', Integer()),
+        ('mode', Integer(optional=True))
+    ]
 
 
-class SMSSelectMessageFormat(Command):
+class SMSSelectMessageFormatTest(Command):
     """
-    Select SMS message format.
+    Get supported ranges and parameters for SMS message format.
     """
-    PDU_MODE = ValueConstant(0)
-    TEXT_MODE = ValueConstant(1)
-
-    TEST_COMMAND = ValueConstant({
-        'command': 'AT+CMGF=?',
-        'response': '+CMGF: (list of supported <mode>s)'
-    })
-    READ_COMMAND = ValueConstant({
-        'command': 'AT+CMGF?',
-        'response': '+CMGF: <mode>'
-    })
-    WRITE_COMMAND = ValueConstant({
-        'command': 'AT+CMGF=[<mode>]',
-        'params': {
-            'mode': 0
-        }
-    })
+    response = [
+        ('modes', ListOf(Integer()))
+    ]
 
 
-class SMSDeleteMessage(Command):
+class SMSSelectMessageFormatRead(Command):
+    """
+    Get SMS message format mode.
+    """
+    response = [
+        ('mode', Integer())
+    ]
+
+
+class SMSSelectMessageFormatWrite(Command):
+    """
+    Change SMS message format.
+    """
+    arguments = [
+        ('mode', Integer())
+    ]
+    requiresAnswer = False
+
+
+class SMSDeleteMessageTest(Command):
+    """
+    Get supported ranges and parameters for deleting an SMS message.
+    """
+    response = [
+        ('index', ListOf(Integer())),
+        ('delflag', ListOf(Integer()))
+    ]
+
+
+class SMSDeleteMessageWrite(Command):
     """
     Delete SMS message.
     """
-    maxResponseTime = 25
-
-    DELETE_AT_INDEX = ValueConstant(0)
-    DELETE_READ = ValueConstant(1)
-    DELETE_READ_SENT = ValueConstant(2)
-    DELETE_SENT_UNSENT = ValueConstant(3)
-    DELETE_ALL = ValueConstant(4)
-
-    TEST_COMMAND = ValueConstant({
-        'command': 'AT+CMGD=?',
-        'response': '+CMGD: (list of supported <index>s),(list of supported <delflag>s)'
-    })
-    WRITE_COMMAND = ValueConstant({
-        'command': 'AT+CMGD=<index>[,<delflag>]',
-        'response': '+CMGF: <mode>',
-        'params': {
-            'mode': 0
-        }
-    })
+    arguments = [
+        ('index', Integer()),
+        ('delflag', Integer(optional=True))
+    ]
+    requiresAnswer = False
