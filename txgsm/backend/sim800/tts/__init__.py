@@ -44,6 +44,7 @@ class TTSManager(CommandLocator):
         # XXX: call AT command
 
         # XXX: parse AT command result
+        actualResponse = '+CTTSPARAM: 50,0,50,50,0'
         response = '+CTTSPARAM: <volume>,<mode>,<pitch>,<speed>,<channel>'
         volume = mode = channel = 0
         pitch = speed = 1
@@ -92,6 +93,7 @@ class TTSManager(CommandLocator):
         atCommandName = 'AT+CTTS?'
 
         # XXX: parse AT command result
+        actualResponse = '+CTTS: 0'
         response = '+CTTS: <status>'
 
         return {'status': 0}
@@ -108,7 +110,7 @@ class TTSManager(CommandLocator):
             maximum data length is 956 Bytes.
         :type text: string
         """
-        atCommandName = 'AT+CTTS='
+        atCommandName = 'AT+CTTS=<mode>[,<text>]'
 
         return {}
 
@@ -142,7 +144,8 @@ class TTSManager(CommandLocator):
         # XXX: call AT command
 
         # XXX: parse AT command result
-        response = '+CTTSRING: <mode>'
+        actualResponse = '+CTTSRING: 0'
+        response = '+CTTSRING: <status>'
 
         return {'mode': 0}
 
