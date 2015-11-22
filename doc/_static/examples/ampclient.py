@@ -1,3 +1,4 @@
+import logging
 from pprint import pprint
 
 from twisted.internet import reactor
@@ -7,6 +8,10 @@ from twisted.protocols.amp import AMP
 
 from txgsm.backend.sim800.tts import commands as ttscommands
 from txgsm.backend.sim800.audio import commands as audiocommands
+
+level = logging.DEBUG
+logging.basicConfig(level=level)
+logging.getLogger('rfc2217').setLevel(level)
 
 
 def doOperations():
