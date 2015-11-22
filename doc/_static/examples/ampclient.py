@@ -1,13 +1,13 @@
 from pprint import pprint
 
-from twisted.internet import reactor, endpoints
+from twisted.internet import reactor
 from twisted.internet.defer import DeferredList
 from twisted.internet.endpoints import TCP4ClientEndpoint, connectProtocol
 from twisted.protocols.amp import AMP
 
-from txgsm.backend.sim800 import commands
 from txgsm.backend.sim800.tts import commands as ttscommands
 from txgsm.backend.sim800.audio import commands as audiocommands
+
 
 def doOperations():
     destination = TCP4ClientEndpoint(reactor, '127.0.0.1', 1234)
