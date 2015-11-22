@@ -95,12 +95,13 @@ class AudioManager(CommandLocator):
         # XXX: call AT command
 
         # XXX: parse AT command result
+        actualResponse = '+CMIC: (0,2),(0-15)'
         response = '+CMIC: (list of supported <channel>s),(list of supported <gainlevel>s)'
 
         # return AT command result
         return {
-            'channels': [0, 1, 2, 3],
-            'gainLevels': [0, 1, 3, 4, 100]
+            'channels': [0, 2],
+            'gainLevels': [0, 15]
         }
 
 
@@ -114,11 +115,12 @@ class AudioManager(CommandLocator):
         # XXX: call AT command
 
         # XXX: parse AT command result
+        actualResponse = '+CMIC: (0,10),(2,10)'
         response = '+CMIC: (<channel0>,<gainlevel0>),...,(<channeln>,<gainleveln>)'
 
         # return AT command result
         return {
-            'levels': [[0, 1], [1, 3]]
+            'levels': [[0, 10], [2, 10]]
         }
 
 
@@ -152,6 +154,7 @@ class AudioManager(CommandLocator):
         # XXX: call AT command
 
         # XXX: parse AT command result
+        actualResponse = '+CEXTERNTONE: (0,1)'
         response = '+CEXTERNTONE: (0,1)'
 
         # return AT command result
@@ -170,6 +173,7 @@ class AudioManager(CommandLocator):
         # XXX: call AT command
 
         # XXX: parse AT command result
+        actualResponse = '+CEXTERNTONE: 0'
         response = '+CEXTERNTONE: <mode>'
 
         # return AT command result
@@ -254,6 +258,7 @@ class AudioManager(CommandLocator):
         # XXX: call AT command
 
         # XXX: parse AT command result
+        actualResponse = '+CLVL: 33'
         response = '+CLVL: <level>'
 
         # return AT command result
@@ -289,6 +294,7 @@ class AudioManager(CommandLocator):
         # XXX: call AT command
 
         # XXX: parse AT command result
+        actualResponse = '+CALS: (0-19),(0,1)'
         response = '+CALS: (list of supported <n>s),(list of supported <switch>s)'
 
         # return AT command result
